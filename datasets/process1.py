@@ -9,7 +9,7 @@ import numpy as np
 current_dir = os.getcwd()
 DATA_PATH = os.path.join(current_dir,"data")
 def get_idx(path, dataset_name):
-    print(f"Checking files inside: {path}")
+   # print(f"Checking files inside: {path}")
     """Map entities and relations to unique ids.
 
     Args:
@@ -21,7 +21,7 @@ def get_idx(path, dataset_name):
     """
     entities, relations, locations, times = set(), set(), set(), set()
     for split in ["train", "valid", "test"]:
-  #      file_path = os.path.join(path, split)
+        file_path = os.path.join(path, split)
 
    #     if not os.path.exists(file_path):
     #        print(f"WARNING: {file_path} does not exist!")  # Warn if a file is missing
