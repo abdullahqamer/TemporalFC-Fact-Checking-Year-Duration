@@ -9,7 +9,7 @@ import numpy as np
 current_dir = os.getcwd()
 DATA_PATH = os.path.join(current_dir,"data")
 def get_idx(path, dataset_name):
- #   print(f"Checking files inside: {path}")
+    print(f"Checking files inside: {path}")
     """Map entities and relations to unique ids.
 
     Args:
