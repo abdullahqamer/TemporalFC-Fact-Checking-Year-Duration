@@ -5,9 +5,11 @@ import os
 import pickle
 import os
 import numpy as np
+import json
 
 current_dir = os.getcwd()
 DATA_PATH = os.path.join(current_dir,"data")
+print("this is the datapat: ", DATA_PATH)
 def get_idx(path, dataset_name):
    # print(f"Checking files inside: {path}")
     """Map entities and relations to unique ids.
@@ -21,13 +23,27 @@ def get_idx(path, dataset_name):
     """
     entities, relations, locations, times = set(), set(), set(), set()
     for split in ["train", "valid", "test"]:
-        file_path = os.path.join(path, split)
+       # file_path = os.path.join(path, split)
 
    #     if not os.path.exists(file_path):
     #        print(f"WARNING: {file_path} does not exist!")  # Warn if a file is missing
      #       continue
       #  print(f"Reading file: {file_path}")  # Print the exact file being read
-        with open(os.path.join(path, split), "r") as lines:
+        #with open(os.path.join(path, split), "r") as lines:    #MY EDITING: Commented
+        dataset_file = os.path.join(path, f"{split}")   #MY EDITING: Comment out
+        #if not os.path.exists(dataset_file):
+         #   print(f"🚫 Missing file: {dataset_file}")
+
+        print(f"🚨 Reading file: {dataset_file}")
+
+        with open(dataset_file, "r") as lines:          #MY EDITING: Comment out
+            # Display the first 5 lines for debugging
+            #print("First 5 lines of the file:")
+            #for i, line in enumerate(lines):
+             #   if i < 5:
+             #       print(line.strip())  # Print each of the first 5 lines
+             #   else:
+             #       break
             for line in lines:
                 if dataset_name == 'Yago5' or dataset_name == "DBPedia5" or dataset_name == "Wikidata5":
                     lhs, rel, rhs, loc, tim = line.strip().split("\t")
@@ -45,7 +61,30 @@ def get_idx(path, dataset_name):
     if dataset_name == 'Yago5' or dataset_name == "DBPedia5" or dataset_name == "Wikidata5":
         loc2idx = {x: i for (i, x) in enumerate(sorted(locations))}
         tim2idx = {x: i for (i, x) in enumerate(sorted(times))}
+
+        #MY EDITING
+        # Save the dictionaries to separate JSON text files
+#        with open(os.path.join(path, "entities.dict"), "w") as f:
+#            json.dump(ent2idx, f, indent=4)
+#        with open(os.path.join(path, "relations.dict"), "w") as f:
+#            json.dump(rel2idx, f, indent=4)
+#        with open(os.path.join(path, "locations.dict"), "w") as f:
+#            json.dump(loc2idx, f, indent=4)
+#        with open(os.path.join(path, "times.dict"), "w") as f:
+#            json.dump(tim2idx, f, indent=4)
+        # until here MY EDITING
+
         return ent2idx, rel2idx, loc2idx, tim2idx
+
+    # MY EDITING
+#    else:
+        # Save the dictionaries for entities and relations as JSON text files
+#        with open(os.path.join(path, "entities.dict"), "w") as f:
+#            json.dump(ent2idx, f, indent=4)
+#        with open(os.path.join(path, "relations.dict"), "w") as f:
+#            json.dump(rel2idx, f, indent=4)
+   # until here MY EDITING
+
     return ent2idx, rel2idx
 
 
@@ -142,8 +181,10 @@ def process_dataset(path, dataset_name):
     examples = {}
     splits = ["train", "valid", "test"]
     for split in splits:
-        dataset_file = os.path.join(path, split)
-        examples[split] = to_np_array(dataset_file, ent2idx, rel2idx, loc2idx, tim2idx, dataset_name)
+        dataset_file = os.path.join(path, f"{split}")   #MY EDITING : no ".pickle" here, only raw data files
+        print(f"🚫 Missing file: {dataset_file}")    ##MY EDITING :debugging print missing files
+        with open(dataset_file, "r") as lines:          #MY Editing
+            examples[split] = to_np_array(dataset_file, ent2idx, rel2idx, loc2idx, tim2idx, dataset_name)
     all_examples = np.concatenate([examples[split] for split in splits], axis=0)
     lhs_skip, rhs_skip = get_filters(all_examples, len(rel2idx), dataset_name)
     filters = {"lhs": lhs_skip, "rhs": rhs_skip}
@@ -154,14 +195,16 @@ if __name__ == "__main__":
     data_path = DATA_PATH
     #print(data_path)
     #exit()
+
     for dataset_name in os.listdir(data_path):
         dataset_path = os.path.join(data_path, dataset_name)
         #print(dataset_path)
         #exit()
-        dataset_examples, dataset_filters = process_dataset(dataset_path, dataset_name)
-        for dataset_split in ["train", "valid", "test"]:
-            save_path = os.path.join(dataset_path, dataset_split + ".pickle")
-            with open(save_path, "wb") as save_file:
-                pickle.dump(dataset_examples[dataset_split], save_file)
-        with open(os.path.join(dataset_path, "to_skip.pickle"), "wb") as save_file:
-            pickle.dump(dataset_filters, save_file)
+        if (os.path.isdir(dataset_path)):
+            dataset_examples, dataset_filters = process_dataset(dataset_path, dataset_name)
+            for dataset_split in ["train", "valid", "test"]:
+                save_path = os.path.join(dataset_path, dataset_split + ".pickle")
+                with open(save_path, "wb") as save_file:
+                    pickle.dump(dataset_examples[dataset_split], save_file)
+            with open(os.path.join(dataset_path, "to_skip.pickle"), "wb") as save_file:
+                pickle.dump(dataset_filters, save_file)
