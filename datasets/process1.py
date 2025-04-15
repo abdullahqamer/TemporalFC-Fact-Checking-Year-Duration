@@ -64,25 +64,25 @@ def get_idx(path, dataset_name):
 
         #MY EDITING
         # Save the dictionaries to separate JSON text files
-#        with open(os.path.join(path, "entities.dict"), "w") as f:
-#            json.dump(ent2idx, f, indent=4)
-#        with open(os.path.join(path, "relations.dict"), "w") as f:
-#            json.dump(rel2idx, f, indent=4)
-#        with open(os.path.join(path, "locations.dict"), "w") as f:
-#            json.dump(loc2idx, f, indent=4)
-#        with open(os.path.join(path, "times.dict"), "w") as f:
-#            json.dump(tim2idx, f, indent=4)
+        with open(os.path.join(path, "entities.dict"), "w") as f:
+            json.dump(ent2idx, f, indent=4)
+        with open(os.path.join(path, "relations.dict"), "w") as f:
+            json.dump(rel2idx, f, indent=4)
+        with open(os.path.join(path, "locations.dict"), "w") as f:
+            json.dump(loc2idx, f, indent=4)
+        with open(os.path.join(path, "times.dict"), "w") as f:
+            json.dump(tim2idx, f, indent=4)
         # until here MY EDITING
 
         return ent2idx, rel2idx, loc2idx, tim2idx
 
     # MY EDITING
-#    else:
+    else:
         # Save the dictionaries for entities and relations as JSON text files
-#        with open(os.path.join(path, "entities.dict"), "w") as f:
-#            json.dump(ent2idx, f, indent=4)
-#        with open(os.path.join(path, "relations.dict"), "w") as f:
-#            json.dump(rel2idx, f, indent=4)
+        with open(os.path.join(path, "entities.dict"), "w") as f:
+            json.dump(ent2idx, f, indent=4)
+        with open(os.path.join(path, "relations.dict"), "w") as f:
+            json.dump(rel2idx, f, indent=4)
    # until here MY EDITING
 
     return ent2idx, rel2idx
