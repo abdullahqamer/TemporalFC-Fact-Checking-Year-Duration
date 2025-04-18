@@ -9,7 +9,7 @@ import json
 
 current_dir = os.getcwd()
 DATA_PATH = os.path.join(current_dir,"data")
-print("this is the datapat: ", DATA_PATH)
+#print("this is the datapat: ", DATA_PATH)
 def get_idx(path, dataset_name):
    # print(f"Checking files inside: {path}")
     """Map entities and relations to unique ids.
@@ -34,13 +34,13 @@ def get_idx(path, dataset_name):
         #if not os.path.exists(dataset_file):
          #   print(f"🚫 Missing file: {dataset_file}")
 
-        print(f"🚨 Reading file: {dataset_file}")
+        #print(f"🚨 Reading file: {dataset_file}")
 
         with open(dataset_file, "r") as lines:          #MY EDITING: Comment out
             # Display the first 5 lines for debugging
             #print("First 5 lines of the file:")
             #for i, line in enumerate(lines):
-             #   if i < 5:
+             #   if i < 5:locations
              #       print(line.strip())  # Print each of the first 5 lines
              #   else:
              #       break
@@ -68,9 +68,9 @@ def get_idx(path, dataset_name):
             json.dump(ent2idx, f, indent=4)
         with open(os.path.join(path, "relations.dict"), "w") as f:
             json.dump(rel2idx, f, indent=4)
-        with open(os.path.join(path, "locations.dict"), "w") as f:
-            json.dump(loc2idx, f, indent=4)
         with open(os.path.join(path, "times.dict"), "w") as f:
+            json.dump(loc2idx, f, indent=4)
+        with open(os.path.join(path, "locations.dict"), "w") as f:
             json.dump(tim2idx, f, indent=4)
         # until here MY EDITING
 
@@ -182,7 +182,7 @@ def process_dataset(path, dataset_name):
     splits = ["train", "valid", "test"]
     for split in splits:
         dataset_file = os.path.join(path, f"{split}")   #MY EDITING : no ".pickle" here, only raw data files
-        print(f"🚫 Missing file: {dataset_file}")    ##MY EDITING :debugging print missing files
+        #print(f"🚫 Missing file: {dataset_file}")    ##MY EDITING :debugging print missing files
         with open(dataset_file, "r") as lines:          #MY Editing
             examples[split] = to_np_array(dataset_file, ent2idx, rel2idx, loc2idx, tim2idx, dataset_name)
     all_examples = np.concatenate([examples[split] for split in splits], axis=0)
